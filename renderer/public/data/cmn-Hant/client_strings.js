@@ -140,6 +140,7 @@ export default {
   CHART_SULPHUR: '亡者硫酸: ',
   MERCENARY_LEVEL: '傭兵等級: ',
   MERCENARY_BUILD: '流派: ',
+  STORED_EXPERIENCE: 'Stored Experience: ',
   // ---
   CHAT_SYSTEM: /^: (?<body>.+)$/,
   CHAT_TRADE: /^\$(?:<(?<guild_tag>.+?)> )?(?<char_name>.+?): (?<body>.+)$/,

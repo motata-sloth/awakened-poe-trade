@@ -97,6 +97,7 @@ export interface ParsedItem {
   info: BaseType
   uniqueBase?: BaseType
   rawText: string
+  storedExperience?: number
 }
 
 // NOTE: should match option values on trade

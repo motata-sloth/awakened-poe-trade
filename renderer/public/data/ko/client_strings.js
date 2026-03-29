@@ -140,6 +140,7 @@ export default {
   CHART_SULPHUR: '망자의 유황: ',
   MERCENARY_LEVEL: '용병 레벨: ',
   MERCENARY_BUILD: '빌드: ',
+  STORED_EXPERIENCE: 'Stored Experience: ',
   // ---
   CHAT_SYSTEM: /^: (?<body>.+)$/,
   CHAT_TRADE: /^\$(?:<(?<guild_tag>.+?)> )?(?<char_name>.+?): (?<body>.+)$/,

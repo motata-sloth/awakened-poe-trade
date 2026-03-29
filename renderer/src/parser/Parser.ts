@@ -87,7 +87,8 @@ const parsers: Array<ParserFn | { virtual: VirtualParserFn }> = [
   { virtual: parseFractured },
   { virtual: pickCorrectVariant },
   { virtual: calcDisenchantDust },
-  { virtual: calcBasePercentile }
+  { virtual: calcBasePercentile },
+  parseStoredExperience
 ]
 
 const VALUE_AUGMENTED = ' (augmented)'
@@ -1339,4 +1340,16 @@ function calcDisenchantDust (item: ParsedItem) {
   const totalMulti = 5 * (term1 + term2 + term3 + term4) * factorsMulti
 
   item.dustEquivalent = Math.floor(item.info.unique.disenchantValue * totalMulti)
+}
+
+function parseStoredExperience (section: string[], item: ParsedItem) {
+  const prefix = _$.STORED_EXPERIENCE
+
+  for (const line of section) {
+    if (line.startsWith(prefix)) {
+      item.storedExperience = Number(line.slice(prefix.length).replace(/,/g, ''))
+      return 'SECTION_PARSED'
+    }
+  }
+  return 'SECTION_SKIPPED'
 }

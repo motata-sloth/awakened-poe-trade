@@ -263,6 +263,7 @@ export interface TranslationDict {
   CHART_SULPHUR: string
   MERCENARY_LEVEL: string
   MERCENARY_BUILD: string
+  STORED_EXPERIENCE: string
   // ---
   CHAT_SYSTEM: RegExp
   CHAT_TRADE: RegExp

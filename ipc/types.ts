@@ -4,6 +4,7 @@ export interface HostConfig {
   clientLog: string | null
   gameConfig: string | null
   stashScroll: boolean
+  wheelToClick: boolean
   overlayKey: string
   logKeys: boolean
   windowTitle: string

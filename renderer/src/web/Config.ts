@@ -114,6 +114,8 @@ export interface Config {
   logKeys: boolean
   accountName: string
   stashScroll: boolean
+  // optional: added on the `mine` branch without a configVersion bump
+  wheelToClick?: boolean
   language: 'en' | 'ru' | 'cmn-Hant' | 'ko'
   realm: 'pc-ggg' | 'pc-garena'
   useIntlSite: boolean
@@ -160,6 +162,7 @@ export const defaultConfig = (): Config => ({
   logKeys: false,
   accountName: '',
   stashScroll: true,
+  wheelToClick: false,
   language: 'en',
   realm: 'pc-ggg',
   useIntlSite: false,
@@ -563,6 +566,7 @@ function getConfigForHost (): HostConfig {
     clientLog: config.clientLog,
     gameConfig: config.gameConfig,
     stashScroll: config.stashScroll,
+    wheelToClick: config.wheelToClick ?? false,
     overlayKey: config.overlayKey,
     logKeys: config.logKeys,
     windowTitle: config.windowTitle,

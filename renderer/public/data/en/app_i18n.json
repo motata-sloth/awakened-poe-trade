@@ -339,6 +339,7 @@
     "clear_hotkey": "You can clear hotkey by pressing Backspace",
     "overlay" :"Overlay",
     "stash_scroll" :"Stash tab scrolling",
+    "wheel_to_click": "Mouse wheel sends left click (replaces scrolling)",
     "delve_grid" :"Grid for Delve Chart",
     "window_title": "PoE window title",
     "thank_you": "App development continues thanks to:",

@@ -18,6 +18,7 @@
   "main": "dist/main.js",
   "dependencies": {
     "electron-overlay-window": "4.1.0",
+    "koffi": "^3.3.8",
     "uiohook-napi": "1.5.5"
   },
   "devDependencies": {

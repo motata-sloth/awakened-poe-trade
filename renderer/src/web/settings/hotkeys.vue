@@ -13,6 +13,9 @@
         <ui-radio v-model="stashScroll" :value="false">{{ t('Disabled') }}</ui-radio>
       </div>
     </div>
+    <div v-if="isWindows" class="mb-8">
+      <ui-checkbox v-model="wheelToClick">{{ t('settings.wheel_to_click') }}</ui-checkbox>
+    </div>
   </div>
 </template>
 
@@ -30,6 +33,7 @@ import { PriceCheckWidget, DelveGridWidget } from '@/web/overlay/interfaces'
 import { ItemCheckWidget } from '../item-check/widget.js'
 
 import UiRadio from '@/web/ui/UiRadio.vue'
+import UiCheckbox from '@/web/ui/UiCheckbox.vue'
 import HotkeysGeneric, { HotkeySchema } from '../settings/HotkeysGeneric.vue'
 
 const props = defineProps(configProp())
@@ -67,6 +71,9 @@ const hotkeys = computed<HotkeySchema[]>(() => {
 })
 
 const stashScroll = configModelValue(() => props.config, 'stashScroll')
+const wheelToClick = configModelValue(() => props.config, 'wheelToClick')
+// the wheel-to-click hook is implemented only for Windows (main/src/shortcuts/WheelClickHook.ts)
+const isWindows = navigator.userAgent.includes('Windows')
 
 const { t } = useI18n()
 </script>

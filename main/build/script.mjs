@@ -31,12 +31,20 @@ const visionBuild = await esbuild.build({
   outfile: 'dist/vision.js'
 })
 
+const wheelHookBuild = await esbuild.build({
+  entryPoints: ['src/shortcuts/wheel-hook-worker.ts'],
+  bundle: true,
+  platform: 'node',
+  external: ['koffi'],
+  outfile: 'dist/wheel-hook.js'
+})
+
 const mainContext = await esbuild.context({
   entryPoints: ['src/main.ts'],
   bundle: true,
   minify: !isDev,
   platform: 'node',
-  external: ['electron', 'uiohook-napi', 'electron-overlay-window'],
+  external: ['electron', 'uiohook-napi', 'electron-overlay-window', 'koffi'],
   outfile: 'dist/main.js',
   define: {
     'process.env.STATIC': (isDev) ? '"../build/icons"' : '"."',

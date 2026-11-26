@@ -5,6 +5,7 @@ import { typeInChat, stashSearch } from './text-box'
 import { WidgetAreaTracker } from '../windowing/WidgetAreaTracker'
 import { HostClipboard } from './HostClipboard'
 import { OcrWorker } from '../vision/link-main'
+import { WheelClickHook } from './WheelClickHook'
 import type { ShortcutAction } from '../../../ipc/types'
 import type { Logger } from '../RemoteLogger'
 import type { OverlayWindow } from '../windowing/OverlayWindow'
@@ -21,6 +22,7 @@ export class Shortcuts {
   private logKeys = false
   private areaTracker: WidgetAreaTracker
   private clipboard: HostClipboard
+  private wheelClick: WheelClickHook
 
   static async create (
     logger: Logger,
@@ -44,6 +46,7 @@ export class Shortcuts {
   ) {
     this.areaTracker = new WidgetAreaTracker(server, overlay)
     this.clipboard = new HostClipboard(logger)
+    this.wheelClick = new WheelClickHook(logger, poeWindow)
 
     this.poeWindow.on('active-change', (isActive) => {
       process.nextTick(() => {
@@ -74,6 +77,8 @@ export class Shortcuts {
     })
 
     uIOhook.on('wheel', (e) => {
+      // wheel is remapped to left click (Ctrl + wheel = Ctrl + click), never switch stash tabs
+      if (this.wheelClick.isEnabled) return
       if (!e.ctrlKey || !this.poeWindow.isActive || !this.stashScroll) return
 
       if (!isStashArea(e, this.poeWindow)) {
@@ -89,11 +94,13 @@ export class Shortcuts {
   updateActions (
     actions: ShortcutAction[],
     stashScroll: boolean,
+    wheelToClick: boolean,
     logKeys: boolean,
     restoreClipboard: boolean,
     language: string
   ) {
     this.stashScroll = stashScroll
+    this.wheelClick.setEnabled(wheelToClick)
     this.logKeys = logKeys
     this.clipboard.updateOptions(restoreClipboard)
     this.ocrWorker.updateOptions(language)

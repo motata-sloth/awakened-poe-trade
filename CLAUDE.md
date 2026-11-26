@@ -20,6 +20,11 @@ cd main && npm run build             # tsc --noEmit + production esbuild bundle 
 cd main && npm run package           # electron-builder, config in main/electron-builder.yml
 ```
 
+Dev-mode gotchas:
+- **Logs:** main's `Logger` (`main/src/RemoteLogger.ts`) doesn't print to the terminal. It broadcasts to UI clients, so read the log in Settings → Debug. Every new `/events` WebSocket client also receives the full history.
+- **Blank `localhost:8584`:** in dev, main's server doesn't serve the UI (`server.ts` only serves static files when `VITE_DEV_SERVER_URL` is unset). The UI is at `localhost:5173`, so the tray's "open in browser" shows a blank page in dev.
+- **Overlay loads but hotkeys don't work:** the renderer's startup (`renderer/src/main.ts`) awaits config → i18n → data → `Host.init()` in sequence. If any earlier step throws, no WebSocket connects, the host config is never pushed, and main never registers shortcuts. The overlay's detached DevTools window shows the error.
+
 `docs/` is a separate Astro site for the GitHub Pages docs and download page (`.github/workflows/pages.yml`). It is not part of the app.
 
 ## Architecture
@@ -61,5 +66,5 @@ Hotkey bindings live in the renderer config. The renderer pushes them to main wi
   - `app_i18n.json`, the UI translations. Crowdin syncs these with `en` as the source.
 - **Generated externally:** data updates arrive as bulk commits (e.g. "update data 3.30.x"). Don't hand-edit these files for logic changes.
 - **Lookup:** `renderer/src/assets/data/index.ts` searches the ndjson files as raw strings and uses binary `*.index.bin` hash indexes for fast lookup.
-- **Indexes:** `make-index-files.mjs` generates the indexes through a Vite plugin at build start, and regenerates them in dev whenever an `.ndjson` file changes. They are build outputs.
+- **Indexes:** `make-index-files.mjs` generates the indexes through a Vite plugin (`vite-plugin-make-indexes.ts`), and regenerates them in dev whenever an `.ndjson` file changes. They are gitignored build outputs. The plugin generates them in `configResolved`, not `buildStart`: the dev server snapshots the public file list before `buildStart`, so files created later get Vite's `index.html` fallback, and `Uint32Array` on that HTML throws in `Data.init`.
 - **Languages:** supported game-data languages are hardcoded in `make-index-files.mjs` (`en`, `ru`, `cmn-Hant`, `ko`).

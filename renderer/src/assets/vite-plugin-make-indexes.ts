@@ -7,7 +7,10 @@ export function makeIndexFilesPlugin (): Plugin {
 
   return {
     name: 'make-index-files',
-    buildStart () {
+    // Must run before the dev server snapshots the list of public files.
+    // In `buildStart` (which runs after that in dev), a fresh clone's first
+    // `vite` run served index.html instead of the missing *.index.bin files.
+    configResolved () {
       makeIndexFiles()
     },
     configureServer (server) {
